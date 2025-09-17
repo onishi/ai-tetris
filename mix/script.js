@@ -95,6 +95,13 @@
     return Array.from({ length: height }, () => Array(width).fill(0));
   }
 
+  function createGarbageLine() {
+    const line = Array(COLS).fill('GARBAGE');
+    const hole = Math.floor(Math.random() * COLS);
+    line[hole] = 0;
+    return line;
+  }
+
   function cloneShape(type) {
     return SHAPES[type].map((row) => [...row]);
   }
