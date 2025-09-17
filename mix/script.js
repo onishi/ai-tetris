@@ -87,6 +87,7 @@
     score: 0,
     level: 1,
     lines: 0,
+    garbageCounter: 0,
   };
 
   function createMatrix(width, height) {
@@ -524,4 +525,4 @@
 
   update();
   setStatus('スペースでゲーム開始');
-})();
+})();;
