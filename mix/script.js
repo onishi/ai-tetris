@@ -112,6 +112,8 @@
     if (collide(state.board, state.current.matrix, state.pos)) {
         endGame();
     }
+    setStatus('おじゃまブロックが迫っています！');
+    updateGarbageMeter();
   }
 
   function cloneShape(type) {
@@ -308,6 +310,7 @@
         state.garbageCounter = 0;
         addGarbage(1);
     }
+    updateGarbageMeter();
   }
 
   function movePlayer(dir) {
@@ -490,10 +493,19 @@
       drawPreview(holdCanvas, holdCtx, state.hold.type);
   }
 
+  function updateGarbageMeter() {
+    if (!garbageEl) {
+      return;
+    }
+    const remaining = Math.max(0, 6 - state.garbageCounter);
+    garbageEl.textContent = remaining.toString();
+  }
+
   function updateHud() {
     scoreEl.textContent = state.score.toString();
     levelEl.textContent = state.level.toString();
     linesEl.textContent = state.lines.toString();
+    updateGarbageMeter();
   }
 
   function setStatus(message) {
@@ -573,7 +585,7 @@
       case 'ArrowRight':
         movePlayer(1);
         break;
-      case 'ArrowDown
+      case 'ArrowDown':
         softDrop();
         break;
       case 'ArrowUp':
