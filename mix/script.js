@@ -89,6 +89,7 @@
     level: 1,
     lines: 0,
     garbageCounter: 0,
+    particles: [],
   };
 
   function createMatrix(width, height) {
@@ -100,6 +101,16 @@
     const hole = Math.floor(Math.random() * COLS);
     line[hole] = 0;
     return line;
+  }
+
+  function addGarbage(lines) {
+    for (let i = 0; i < lines; i++) {
+        state.board.shift();
+        state.board.push(createGarbageLine());
+    }
+    if (collide(state.board, state.current.matrix, state.pos)) {
+        endGame();
+    }
   }
 
   function cloneShape(type) {
