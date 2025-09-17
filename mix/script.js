@@ -8,6 +8,7 @@
   const scoreEl = document.getElementById('score');
   const levelEl = document.getElementById('level');
   const linesEl = document.getElementById('lines');
+  const garbageEl = document.getElementById('garbage-meter');
   const statusEl = document.getElementById('status');
   const overlay = document.getElementById('overlay');
   const overlayText = document.getElementById('overlay-text');
@@ -236,6 +237,17 @@
           continue outer;
         }
       }
+
+      // Generate particles for cleared line
+      for (let x = 0; x < state.board[y].length; x++) {
+        if (state.board[y][x]) {
+          const color = COLORS[state.board[y][x]];
+          for (let i = 0; i < 3; i++) {
+            state.particles.push(createParticle(x, y, color));
+          }
+        }
+      }
+
       const row = state.board.splice(y, 1)[0].fill(0);
       state.board.unshift(row);
       cleared++;
@@ -331,6 +343,7 @@
           lockPiece();
         }
       }
+      updateParticles(delta);
     }
 
     draw();
@@ -346,6 +359,8 @@
       drawGhost();
       drawMatrix(state.current.matrix, state.pos, state.current.type);
     }
+
+    drawParticles();
   }
 
   function drawWell() {
