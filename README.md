@@ -175,4 +175,13 @@ tetris.html をブラウザで開くだけで遊べる状態にしてくださ�
   - Gemini — Functionality 1/5 (gemini/script.js:144-156 draws active matrix numerics against COLORS keys, leaving live piece invisible). Design 4/5 (gemini/style.css:1-84 cohesive neon UI). Originality 3/5
   (gemini/tetris.html:15-52, gemini/script.js:83-208 standard hold/queue execution without distinctive twists).
 
-  
+# coop
+
+またブラウザで動くテトリスを作ってください。
+
+一つ上の階層にある mix ディレクトリで作業を行ってください。
+リポジトリは git で管理していますので、なるべく細かい粒度で git commit して簡単なメッセージを残してください。コミットメッセージの冒頭に自分の名前を入れてその後にコミットメッセージを日本語で書いてください。できれば他のAIの作業への感想もメッセージにいれてください。
+
+同じディレクトリで、複数のAIが同時に同じコードベースを編集します。競合が起きた場合は、競合を解消してから commit してください。
+お互いの意思を尊重しながら、作業を進めてください。1回コミットしたら、30秒ほど待ち、他のAIのコミットを待ちファイルを読み直してください。
+

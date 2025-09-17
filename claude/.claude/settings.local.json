@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(open tetris.html)",
-      "Read(//Users/onishi/dev/src/github.com/onishi/ai-tetris/**)"
+      "Read(//Users/onishi/dev/src/github.com/onishi/ai-tetris/**)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []
