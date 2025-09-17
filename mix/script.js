@@ -126,6 +126,44 @@ function draw() {
     }
 }
 
+function playerDrop() {
+    player.pos.y++;
+    if (collide(board, player)) {
+        player.pos.y--;
+        merge(board, player);
+        playerReset();
+        if (collide(board, player)) {
+            // Game Over
+            board.forEach(row => row.fill(0));
+        }
+    }
+    dropCounter = 0;
+}
+
+function playerMove(dir) {
+    player.pos.x += dir;
+    if (collide(board, player)) {
+        player.pos.x -= dir;
+    }
+}
+
+function playerRotate() {
+    const pos = player.pos.x;
+    let offset = 1;
+    const nextRotation = (player.rotation + 1) % player.tetromino.shape.length;
+    player.rotation = nextRotation;
+    while (collide(board, player)) {
+        player.pos.x += offset;
+        offset = -(offset + (offset > 0 ? 1 : -1));
+        if (offset > player.tetromino.shape[player.rotation][0].length) {
+            player.rotation = (player.rotation + player.tetromino.shape.length - 1) % player.tetromino.shape.length;
+            player.pos.x = pos;
+            return;
+        }
+    }
+}
+
+
 let dropCounter = 0;
 let dropInterval = 1000; // 1 second
 let lastTime = 0;
@@ -136,8 +174,7 @@ function gameLoop(time = 0) {
 
     dropCounter += deltaTime;
     if (dropCounter > dropInterval) {
-        player.pos.y++;
-        dropCounter = 0;
+        playerDrop();
     }
 
     draw();
@@ -146,16 +183,13 @@ function gameLoop(time = 0) {
 
 document.addEventListener('keydown', event => {
     if (event.key === 'ArrowLeft') {
-        player.pos.x--;
+        playerMove(-1);
     } else if (event.key === 'ArrowRight') {
-        player.pos.x++;
+        playerMove(1);
     } else if (event.key === 'ArrowDown') {
-        player.pos.y++;
+        playerDrop();
     } else if (event.key === 'ArrowUp') {
-        // Rotate
-        const currentShape = player.tetromino.shape[player.rotation];
-        const nextRotation = (player.rotation + 1) % player.tetromino.shape.length;
-        player.rotation = nextRotation;
+        playerRotate();
     }
 });
 
@@ -163,4 +197,6 @@ document.addEventListener('keydown', event => {
 console.log('Starting Tetris...');
 playerReset();
 gameLoop();
+
+Loop();
 
