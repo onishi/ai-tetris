@@ -290,6 +290,12 @@
     spawnPiece();
     state.dropCounter = 0;
     state.hold.available = true;
+
+    state.garbageCounter++;
+    if (state.garbageCounter > 5) {
+        state.garbageCounter = 0;
+        addGarbage(1);
+    }
   }
 
   function movePlayer(dir) {
@@ -405,6 +411,18 @@
       ghostPos.y++;
     }
     drawMatrix(state.current.matrix, ghostPos, 'GHOST');
+  }
+
+  function createParticle(x, y, color) {
+    return {
+      x: x * BLOCK_SIZE + BLOCK_SIZE / 2,
+      y: y * BLOCK_SIZE + BLOCK_SIZE / 2,
+      vx: (Math.random() - 0.5) * 4,
+      vy: (Math.random() - 0.5) * 4 - 2,
+      color: color,
+      life: 1.0,
+      decay: 0.02
+    };
   }
 
   function drawPreview(canvas, context, pieceType) {
