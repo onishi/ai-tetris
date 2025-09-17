@@ -425,6 +425,30 @@
     };
   }
 
+  function updateParticles(delta) {
+    for (let i = state.particles.length - 1; i >= 0; i--) {
+      const particle = state.particles[i];
+      particle.x += particle.vx;
+      particle.y += particle.vy;
+      particle.vy += 0.1;
+      particle.life -= particle.decay;
+
+      if (particle.life <= 0) {
+        state.particles.splice(i, 1);
+      }
+    }
+  }
+
+  function drawParticles() {
+    for (const particle of state.particles) {
+      boardCtx.save();
+      boardCtx.globalAlpha = particle.life;
+      boardCtx.fillStyle = particle.color;
+      boardCtx.fillRect(particle.x - 2, particle.y - 2, 4, 4);
+      boardCtx.restore();
+    }
+  }
+
   function drawPreview(canvas, context, pieceType) {
       context.clearRect(0, 0, canvas.width, canvas.height);
       if (!pieceType) return;
