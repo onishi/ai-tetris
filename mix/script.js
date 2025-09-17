@@ -99,6 +99,27 @@ function drawBoard() {
     });
 }
 
+function drawNext() {
+    nextContext.fillStyle = '#000';
+    nextContext.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
+    if (player.nextPiece) {
+        const matrix = TETROMINOES[player.nextPiece];
+        const color = COLORS[player.nextPiece];
+        const offset = {
+            x: (nextCanvas.width / 20 / 2) - (matrix[0].length / 2),
+            y: (nextCanvas.height / 20 / 2) - (matrix.length / 2),
+        };
+        matrix.forEach((row, y) => {
+            row.forEach((value, x) => {
+                if (value !== 0) {
+                    nextContext.fillStyle = color;
+                    nextContext.fillRect(x + offset.x, y + offset.y, 1, 1);
+                }
+            });
+        });
+    }
+}
+
 function draw() {
     context.fillStyle = '#000';
     context.fillRect(0, 0, canvas.width, canvas.height);
