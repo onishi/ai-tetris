@@ -3,6 +3,8 @@
   const boardCtx = boardCanvas.getContext('2d');
   const nextCanvas = document.getElementById('next');
   const nextCtx = nextCanvas.getContext('2d');
+  const holdCanvas = document.getElementById('hold');
+  const holdCtx = holdCanvas.getContext('2d');
   const scoreEl = document.getElementById('score');
   const levelEl = document.getElementById('level');
   const linesEl = document.getElementById('lines');
@@ -68,12 +70,14 @@
   boardCanvas.width = COLS * BLOCK_SIZE;
   boardCanvas.height = ROWS * BLOCK_SIZE;
   nextCtx.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
+  holdCtx.clearRect(0, 0, holdCanvas.width, holdCanvas.height);
 
   const state = {
     board: createMatrix(COLS, ROWS),
     bag: [],
     queue: [],
     current: null,
+    hold: { type: null, available: true },
     pos: { x: 0, y: 0 },
     dropCounter: 0,
     dropInterval: 1000,
@@ -115,9 +119,13 @@
     }
   }
 
-  function spawnPiece() {
-    refillQueue();
-    state.current = state.queue.shift();
+  function spawnPiece(type) {
+    if (!type) {
+        refillQueue();
+        state.current = state.queue.shift();
+    } else {
+        state.current = { type, matrix: cloneShape(type) };
+    }
     state.pos.y = -getTopOffset(state.current.matrix);
     state.pos.x = Math.floor((COLS - state.current.matrix[0].length) / 2);
 
@@ -261,6 +269,7 @@
     updateHud();
     spawnPiece();
     state.dropCounter = 0;
+    state.hold.available = true;
   }
 
   function movePlayer(dir) {
@@ -271,6 +280,17 @@
     if (!collide(state.board, state.current.matrix, nextPos)) {
       state.pos = nextPos;
     }
+  }
+
+  function hold() {
+      if (!state.hold.available || !state.running || state.paused) {
+          return;
+      }
+      const heldType = state.hold.type;
+      state.hold.type = state.current.type;
+      state.hold.available = false;
+      spawnPiece(heldType);
+      drawHoldPreview();
   }
 
   function update(time = 0) {
@@ -367,35 +387,30 @@
     drawMatrix(state.current.matrix, ghostPos, 'GHOST');
   }
 
-  function drawNextPreview() {
-    nextCtx.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
-    const nextPiece = state.queue[0];
-    if (!nextPiece) {
-      return;
-    }
-    const matrix = nextPiece.matrix;
-    const block = Math.floor(
-      Math.min(
-        (nextCanvas.width - 16) / matrix[0].length,
-        (nextCanvas.height - 16) / matrix.length,
-      ),
-    );
-    const offsetX = (nextCanvas.width - matrix[0].length * block) / 2;
-    const offsetY = (nextCanvas.height - matrix.length * block) / 2;
+  function drawPreview(canvas, context, pieceType) {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      if (!pieceType) return;
+      const matrix = SHAPES[pieceType];
+      const block = Math.floor(Math.min((canvas.width - 16) / matrix[0].length, (canvas.height - 16) / matrix.length));
+      const offsetX = (canvas.width - matrix[0].length * block) / 2;
+      const offsetY = (canvas.height - matrix.length * block) / 2;
 
-    for (let y = 0; y < matrix.length; y++) {
-      for (let x = 0; x < matrix[y].length; x++) {
-        if (matrix[y][x]) {
-          nextCtx.fillStyle = COLORS[nextPiece.type];
-          nextCtx.fillRect(
-            offsetX + x * block,
-            offsetY + y * block,
-            block - 2,
-            block - 2,
-          );
-        }
+      for (let y = 0; y < matrix.length; y++) {
+          for (let x = 0; x < matrix[y].length; x++) {
+              if (matrix[y][x]) {
+                  context.fillStyle = COLORS[pieceType];
+                  context.fillRect(offsetX + x * block, offsetY + y * block, block - 2, block - 2);
+              }
+          }
       }
-    }
+  }
+
+  function drawNextPreview() {
+      drawPreview(nextCanvas, nextCtx, state.queue[0]?.type);
+  }
+
+  function drawHoldPreview() {
+      drawPreview(holdCanvas, holdCtx, state.hold.type);
   }
 
   function updateHud() {
@@ -415,6 +430,7 @@
     state.bag = [];
     state.queue = [];
     state.current = null;
+    state.hold = { type: null, available: true };
     state.score = 0;
     state.level = 1;
     state.lines = 0;
@@ -427,6 +443,7 @@
     updateHud();
     setStatus('ハイスコアを目指しましょう！');
     spawnPiece();
+    drawHoldPreview();
   }
 
   function hideOverlay() {
@@ -490,6 +507,9 @@
         if (state.running && !state.paused) {
           attemptRotate(-1);
         }
+        break;
+      case 'KeyC':
+        hold();
         break;
       case 'KeyP':
         togglePause();
