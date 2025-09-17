@@ -1,14 +1,45 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Tetris Battle</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mix Tetris</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>AI Tetris Battle</h1>
-    <canvas id="tetris-canvas" width="240" height="400"></canvas>
-    <script src="script.js"></script>
+  <main class="layout">
+    <section class="playfield">
+      <canvas id="board" width="320" height="640"></canvas>
+      <div class="overlay hidden" id="overlay">
+        <p id="overlay-text"></p>
+        <button id="restart-button" type="button">リスタート</button>
+      </div>
+    </section>
+    <aside class="sidebar">
+      <h1>Mix Tetris</h1>
+      <section class="panel">
+        <h2>次のミノ</h2>
+        <canvas id="next" width="120" height="120"></canvas>
+      </section>
+      <section class="panel stats">
+        <div>スコア <span id="score">0</span></div>
+        <div>レベル <span id="level">1</span></div>
+        <div>消去ライン <span id="lines">0</span></div>
+      </section>
+      <section class="panel controls">
+        <h2>操作</h2>
+        <ul>
+          <li>← → : 左右移動</li>
+          <li>↑ : 回転</li>
+          <li>↓ : ソフトドロップ</li>
+          <li>スペース : ハードドロップ</li>
+          <li>P : 一時停止</li>
+          <li>R : リスタート</li>
+        </ul>
+      </section>
+      <p class="status" id="status">スペースでゲーム開始</p>
+    </aside>
+  </main>
+  <script src="script.js" defer></script>
 </body>
 </html>
