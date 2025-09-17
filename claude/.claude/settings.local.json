@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(open tetris.html)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
