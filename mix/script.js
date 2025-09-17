@@ -516,7 +516,7 @@
       case 'ArrowRight':
         movePlayer(1);
         break;
-      case 'ArrowDown':
+      case 'ArrowDown
         softDrop();
         break;
       case 'ArrowUp':
