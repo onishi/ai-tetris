@@ -1,38 +1,14 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mix Tetris</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tetris Battle</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="layout">
-    <section class="playfield">
-      <canvas id="board" width="240" height="480"></canvas>
-    </section>
-    <aside class="sidebar">
-      <h1>Tetris</h1>
-      <div class="panel">
-        <h2>次のミノ</h2>
-        <canvas id="next" width="80" height="80"></canvas>
-      </div>
-      <div class="panel">
-        <p>スコア: <span id="score">0</span></p>
-        <p>レベル: <span id="level">1</span></p>
-        <p>消去ライン: <span id="lines">0</span></p>
-      </div>
-      <div class="panel controls">
-        <h2>操作</h2>
-        <ul>
-          <li>← → : 移動</li>
-          <li>↑ : 回転</li>
-          <li>↓ : ソフトドロップ</li>
-          <li>スペース : ハードドロップ</li>
-        </ul>
-      </div>
-    </aside>
-  </main>
-  <script src="tetris.js" defer></script>
+    <h1>AI Tetris Battle</h1>
+    <canvas id="tetris-canvas" width="240" height="400"></canvas>
+    <script src="script.js"></script>
 </body>
 </html>
