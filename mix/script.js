@@ -65,6 +65,7 @@
     J: '#6f9bff',
     L: '#ffb472',
     GHOST: 'rgba(255, 255, 255, 0.12)',
+    GARBAGE: '#d3d3d3',
   };
 
   boardCanvas.width = COLS * BLOCK_SIZE;
@@ -440,6 +441,7 @@
     state.lastTime = 0;
     state.running = true;
     state.paused = false;
+    state.garbageCounter = 0;
     hideOverlay();
     updateHud();
     setStatus('ハイスコアを目指しましょう！');
@@ -500,6 +502,11 @@
         softDrop();
         break;
       case 'ArrowUp':
+        if (state.running && !state.paused) {
+          attemptRotate(1);
+        }
+        break;
+      case 'KeyX':
         if (state.running && !state.paused) {
           attemptRotate(1);
         }
