@@ -236,6 +236,24 @@ document.addEventListener('keydown', event => {
         playerDrop();
     } else if (event.key === 'ArrowUp') {
         playerRotate(1);
+    } else if (event.key === ' ') {
+        playerHardDrop();
+    }
+});
+
+playerReset();
+updateScore();
+update();y === 'ArrowDown') {
+        playerDrop();
+    } else if (event.key === 'ArrowUp') {
+        playerRotate(1);
+    }
+});
+
+playerReset();
+updateScore();
+update(); === 'ArrowUp') {
+        playerRotate(1);
     }
 });
 
