@@ -1,4 +1,3 @@
-
 const canvas = document.getElementById('board');
 const context = canvas.getContext('2d');
 const nextCanvas = document.getElementById('next');
@@ -94,7 +93,7 @@ function collide(board, player) {
     return false;
 }
 
-function drawMatrix(matrix, offset, color, targetContext = context) {
+function drawPiece(matrix, offset, color, targetContext) {
     matrix.forEach((row, y) => {
         row.forEach((value, x) => {
             if (value !== 0) {
@@ -105,7 +104,10 @@ function drawMatrix(matrix, offset, color, targetContext = context) {
     });
 }
 
-function drawBoard() {
+function draw() {
+    // Draw main board
+    context.fillStyle = '#000';
+    context.fillRect(0, 0, canvas.width, canvas.height);
     board.forEach((row, y) => {
         row.forEach((value, x) => {
             if (value !== 0) {
@@ -114,9 +116,11 @@ function drawBoard() {
             }
         });
     });
-}
+    if (player.matrix) {
+        drawPiece(player.matrix, player.pos, COLORS[player.piece], context);
+    }
 
-function drawNext() {
+    // Draw next piece
     nextContext.fillStyle = '#000';
     nextContext.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
     if (player.nextPiece) {
@@ -126,19 +130,8 @@ function drawNext() {
             x: (nextCanvas.width / 20 / 2) - (matrix[0].length / 2),
             y: (nextCanvas.height / 20 / 2) - (matrix.length / 2),
         };
-        drawMatrix(matrix, offset, color, nextContext);
+        drawPiece(matrix, offset, color, nextContext);
     }
-}
-
-function draw() {
-    context.fillStyle = '#000';
-    context.fillRect(0, 0, canvas.width, canvas.height);
-
-    drawBoard();
-    if (player.matrix) {
-        drawMatrix(player.matrix, player.pos, COLORS[player.piece]);
-    }
-    drawNext();
 }
 
 function merge(board, player) {
@@ -156,7 +149,9 @@ function playerDrop() {
     if (collide(board, player)) {
         player.pos.y--;
         merge(board, player);
-        playerReset();
+        if (spawnNewPiece()) {
+            gameState = 'gameover';
+        }
         arenaSweep();
         updateScore();
     }
@@ -169,7 +164,9 @@ function playerHardDrop() {
     }
     player.pos.y--;
     merge(board, player);
-    playerReset();
+    if (spawnNewPiece()) {
+        gameState = 'gameover';
+    }
     arenaSweep();
     updateScore();
     dropCounter = 0;
@@ -182,7 +179,7 @@ function playerMove(dir) {
     }
 }
 
-function playerReset() {
+function spawnNewPiece() {
     const pieces = 'TJLOSIZ';
     player.piece = player.nextPiece;
     player.nextPiece = pieces[pieces.length * Math.random() | 0];
@@ -190,9 +187,7 @@ function playerReset() {
     player.pos.y = 0;
     player.pos.x = (board[0].length / 2 | 0) - (player.matrix[0].length / 2 | 0);
     
-    if (collide(board, player)) {
-        gameState = 'gameover';
-    }
+    return collide(board, player);
 }
 
 function playerRotate(dir) {
@@ -274,7 +269,10 @@ function startGame() {
     player.level = 1;
     const pieces = 'TJLOSIZ';
     player.nextPiece = pieces[pieces.length * Math.random() | 0];
-    playerReset();
+    if (spawnNewPiece()) {
+        gameState = 'gameover';
+        return;
+    }
     updateScore();
     gameState = 'playing';
 }
