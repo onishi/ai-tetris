@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tetris Battle - Gemini</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Noto+Sans+JP&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI TETRIS</h1>
+            <p class="tagline">Crafted by Gemini</p>
+        </header>
+        <div class="game-wrapper">
+            <div class="game-panel left-panel">
+                <div class="panel-box">
+                    <h2>HOLD</h2>
+                    <canvas id="hold-canvas" width="120" height="120"></canvas>
+                </div>
+                <div class="panel-box">
+                    <h2>SCORE</h2>
+                    <p id="score">0</p>
+                </div>
+                 <div class="panel-box">
+                    <h2>LEVEL</h2>
+                    <p id="level">1</p>
+                </div>
+            </div>
+            <div class="game-board-container">
+                <canvas id="tetris-canvas"></canvas>
+                <div id="game-over" class="hidden">
+                    <h2>GAME OVER</h2>
+                    <button id="restart-button">RESTART</button>
+                </div>
+            </div>
+            <div class="game-panel right-panel">
+                <div class="panel-box">
+                    <h2>NEXT</h2>
+                    <canvas id="next-canvas" width="120" height="400"></canvas>
+                </div>
+                <div class="panel-box">
+                    <h2>LINES</h2>
+                    <p id="lines">0</p>
+                </div>
+            </div>
+        </div>
+        <div class="controls-info">
+            <h2>CONTROLS</h2>
+            <p><span>←</span><span>→</span> : MOVE</p>
+            <p><span>↑</span> : ROTATE</p>
+            <p><span>↓</span> : SOFT DROP</p>
+            <p><span>SPACE</span> : HARD DROP</p>
+            <p><span>C</span> : HOLD</p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
